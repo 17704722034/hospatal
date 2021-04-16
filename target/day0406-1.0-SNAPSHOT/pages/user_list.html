@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="../vuejs/vuejs-2.5.16.js"></script>
+    <script type="text/javascript" src="../vuejs/axios-0.18.0.js"></script>
+</head>
+<body>
+    <div id="userdiv">
+        <div id="userlistdiv">
+            <table border="1" rules="all" align="center">
+                <tr>
+                    <td colspan="100">
+                        姓名：<input type="text" v-model="userbean.uname">
+                        年龄：<input type="text" v-model="userbean.age">--至--
+                            <input type="text" v-model="userbean.eage">
+                            <button @click="getUserListConn()">检索</button>
+                    </td>
+                </tr>
+                <tr>
+                    <th>编号</th>
+                    <th>姓名</th>
+                    <th>年龄</th>
+                    <th>性别</th>
+                    <th>生日</th>
+                    <th>电话</th>
+                    <th>地址</th>
+                    <th>科室</th>
+                    <th>职位</th>
+                    <th colspan="100">操作</th>
+                </tr>
+                <tr v-for="u in userlist">
+                    <td>{{u.id}}</td>
+                    <td>{{u.uname}}</td>
+                    <td>{{u.age}}</td>
+                    <td>{{u.gender}}</td>
+                    <td>{{u.birthday}}</td>
+                    <td>{{u.telphone}}</td>
+                    <td>{{u.addrees}}</td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <button @click="toUserPost(u.id)">分配职位</button>
+                        <button @click="toUserDept(u.id)">选择科室</button>
+                        <button>查看菜单</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="100">
+                        当前{{page.currentPage}}/{{page.pageCount}}页
+                        <button @click="pageing(1)">首页</button>
+                        <button @click="pageing(page.previousPage)">上一页</button>
+                        <button @click="pageing(page.nextPage)">下一页</button>
+                        <button @click="pageing(page.pageCount)">尾页</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div id="userdeptdiv" style="display: none">
+            <table border="1" align="center" rules="all">
+                <tr>
+                    <td colspan="100"><h1>目前在给{{entity.uname}}分配科室</h1></td>
+                </tr>
+                <tr>
+                    <td>部门</td>
+                    <td>
+                        <span v-for="d in dlist">
+                             <input type="checkbox" v-model="deptids" :value="d.id">{{d.deptname}}<br>
+                        </span>
+                    </td>
+                    <td><button @click="saveUserDept()">保存</button></td>
+                </tr>
+            </table>
+        </div>
+        <div id="userpostdiv" style="display: none">
+            <!--给用户分配职位-->
+            <table border="1" align="center" rules="all">
+                <tr align="center">
+                    <td colspan="100">
+                        <h2>目前正在给{{entity.uname}}分配职位</h2>
+                    </td>
+                </tr>
+                <tr align="center" v-if="dlist.length==0">
+                    <td colspan="100">
+                        该用户没有科室，请先选择科室
+                    </td>
+                </tr>
+                <tr v-for="d in dlist">
+                    <td>{{d.deptname}}</td>
+                    <td>
+                        <span v-for="p in d.plist">
+                            <input type="checkbox" v-model="d.postids" :value="p.id">{{p.postname}}<br>
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="100">
+                        <button @click="saveUserPost()">保存</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../myjs/user_list.js"></script>
+</html>
